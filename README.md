@@ -18,10 +18,10 @@ bi_agent/
     ├── aisles.csv
     └── departments.csv
 ├── frontend/
-│   ├── index.html
-│   └── static/
-│       ├── css/style.css
-│       └── js/app.js
+    ├── index.html
+    └── static/
+        ├── css/style.css
+        └── js/app.js
  
 ```
 
