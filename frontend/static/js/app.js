@@ -191,7 +191,9 @@ function appendError(msg, sql) {
 
 function appendChartMessage(data) {
   const canvasId = "chart_" + Date.now();
-  const showChart = data.chart_type !== "table" && data.columns && data.rows?.length;
+  const smartType = inferChartType(data.chart_type, data.columns, data.rows);
+  data.chart_type = smartType;
+  const showChart = smartType !== "table" && data.columns && data.rows?.length;
 
   const sqlId = "sql_" + Date.now();
   const insightHtml = data.insight
@@ -200,7 +202,7 @@ function appendChartMessage(data) {
 
   const bodyHtml = showChart
     ? `<div class="chart-canvas-wrap"><canvas id="${canvasId}"></canvas></div>${insightHtml}`
-    : buildTableHtml(data.columns, data.rows) + insightHtml;
+    : `<div style="margin-bottom:10px">${buildTableHtml(data.columns, data.rows)}</div>${insightHtml}`;
 
   const el = createElement(`
     <div class="message ai">
@@ -223,12 +225,41 @@ function appendChartMessage(data) {
   `);
   chatWindow.appendChild(el);
 
+ // REPLACE WITH:
   if (showChart) {
-    renderChart(canvasId, data);
+      data.chart_type = smartType;
+      renderChart(canvasId, data);
   }
 }
 
 /* ── Chart rendering ─────────────────────────────────────── */
+
+function inferChartType(chart_type, columns, rows) {
+  // If Groq already returned a non-bar type, trust it
+  if (chart_type && chart_type !== "bar") return chart_type;
+
+  // Auto-detect based on data shape
+  if (!columns || !rows || rows.length === 0) return "table";
+
+  // More than 3 columns → table
+  if (columns.length > 3) return "table";
+
+  // Check if x-axis looks time-based
+  const xCol = columns[0].toLowerCase();
+  const timeKeywords = ["hour", "day", "week", "month", "year", "date", "time", "dow"];
+  if (timeKeywords.some(k => xCol.includes(k))) return "line";
+
+  // Few rows with percentage-like values → pie
+  if (rows.length <= 8) {
+    const yVals = rows.map(r => parseFloat(r[1]) || 0);
+    const total = yVals.reduce((a, b) => a + b, 0);
+    const allPercent = yVals.every(v => v >= 0 && v <= 100);
+    if (allPercent && Math.abs(total - 100) < 5) return "pie";
+  }
+
+  return "bar";
+}
+
 function renderChart(canvasId, data) {
   const canvas = document.getElementById(canvasId);
   if (!canvas) return;
@@ -273,14 +304,41 @@ function renderChart(canvasId, data) {
   };
 
   let cfg;
-  if (chart_type === "pie") {
+  // REPLACE WITH:
+if (chart_type === "pie") {
     cfg = {
       type: "pie",
       data: {
         labels,
-        datasets: [{ data: values, backgroundColor: PALETTE, borderColor: "#0c0d0f", borderWidth: 2 }]
+        datasets: [{
+          data: values,
+          backgroundColor: PALETTE.slice(0, values.length),
+          borderColor: "#0c0d0f",
+          borderWidth: 2,
+          hoverOffset: 6
+        }]
       },
-      options: { ...commonOptions, plugins: { ...commonOptions.plugins, legend: { display: true, position: "right", labels: { color: "#6b7280" } } } }
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: {
+            display: true,
+            position: "right",
+            labels: { color: "#6b7280", font: { size: 11 }, padding: 12 }
+          },
+          tooltip: {
+            backgroundColor: "#111318",
+            borderColor: "#1e2230",
+            borderWidth: 1,
+            titleColor: "#f59e0b",
+            bodyColor: "#e8eaf0",
+            callbacks: {
+              label: (ctx) => ` ${ctx.label}: ${ctx.parsed}`
+            }
+          }
+        }
+      }
     };
   } else if (chart_type === "line") {
     cfg = {
