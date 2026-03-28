@@ -13,10 +13,10 @@ env/
 *.egg-info/
 
 # Data files (too large for GitHub)
-backend/data/
-*.csv
-*.zip
-*.gz
+# backend/data/
+# *.csv
+# *.zip
+# *.gz
 
 # IDE
 .vscode/
