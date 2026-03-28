@@ -12,6 +12,9 @@ venv/
 env/
 *.egg-info/
 
+# Data files (too large for GitHub)
+data/
+*.csv
 
 # IDE
 .vscode/
