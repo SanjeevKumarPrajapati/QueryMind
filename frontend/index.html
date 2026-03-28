@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>QueryMind — Conversational BI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+<link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+
+<!-- ── Sidebar ─────────────────────────────────────────── -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-icon">
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="18" width="6" height="12" rx="1" fill="var(--accent)"/>
+        <rect x="10" y="10" width="6" height="20" rx="1" fill="var(--accent)" opacity="0.7"/>
+        <rect x="18" y="4" width="6" height="26" rx="1" fill="var(--accent)" opacity="0.4"/>
+        <circle cx="26" cy="6" r="4" fill="var(--accent-hot)"/>
+      </svg>
+    </div>
+    <span class="brand-name">QueryMind</span>
+  </div>
+
+  <div class="sidebar-section-label">Tables</div>
+  <div id="tableList" class="table-list">
+    <div class="skeleton-pill"></div>
+    <div class="skeleton-pill"></div>
+    <div class="skeleton-pill"></div>
+  </div>
+
+  <div class="sidebar-section-label">Suggestions</div>
+  <div id="suggestionList" class="suggestion-list"></div>
+
+  <div class="sidebar-footer">
+    <div class="model-badge">
+      <span class="dot"></span>
+      <span id="modelLabel">llama-3.1-8b-instant</span>
+    </div>
+    <button class="clear-btn" id="clearBtn">Clear chat</button>
+  </div>
+</aside>
+
+<!-- ── Main ────────────────────────────────────────────── -->
+<main class="main">
+
+  <!-- Header -->
+  <header class="topbar">
+    <div class="topbar-title">Conversational BI Agent</div>
+    <div class="topbar-sub">Powered by Groq · DuckDB · Instacart Dataset</div>
+  </header>
+
+  <!-- Chat window -->
+  <div class="chat-window" id="chatWindow">
+    <div class="welcome-card" id="welcomeCard">
+      <div class="welcome-icon">⚡</div>
+      <h2>Ask anything about your data</h2>
+      <p>Query across 6 interrelated tables. Get charts, tables, and insights instantly.</p>
+      <div class="sample-chips" id="sampleChips"></div>
+    </div>
+  </div>
+
+  <!-- Input bar -->
+  <div class="input-bar">
+    <div class="input-wrap">
+      <textarea
+        id="questionInput"
+        placeholder="Ask a question about your e-commerce data…"
+        rows="1"
+      ></textarea>
+      <button class="send-btn" id="sendBtn" title="Send">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="22" y1="2" x2="11" y2="13"/>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+    </div>
+    <div class="input-hint">Press <kbd>Enter</kbd> to send · <kbd>Shift+Enter</kbd> for newline</div>
+  </div>
+
+</main>
+
+<script src="static/js/app.js"></script>
+</body>
+</html>
