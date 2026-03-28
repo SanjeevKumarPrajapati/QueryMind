@@ -49,10 +49,9 @@ export GROQ_API_KEY="gsk_your_key_here"
 # Optional: point to your data folder (default: ../data)
 export DATA_DIR="../data"
 
+In your terminal, run the following code from within the backend folder
 python app.py
 ```
-
-Backend runs at: http://localhost:5000
 
 ### 4. Open Frontend
 
