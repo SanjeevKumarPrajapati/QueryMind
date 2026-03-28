@@ -10,11 +10,6 @@ bi_agent/
 ├── backend/
 │   ├── app.py              ← Flask API + Groq + DuckDB
 │   └── requirements.txt
-├── frontend/
-│   ├── index.html
-│   └── static/
-│       ├── css/style.css
-│       └── js/app.js
 └── data/                   ← Put your CSV files here
     ├── orders.csv
     ├── order_products__prior.csv
@@ -22,6 +17,12 @@ bi_agent/
     ├── products.csv
     ├── aisles.csv
     └── departments.csv
+├── frontend/
+│   ├── index.html
+│   └── static/
+│       ├── css/style.css
+│       └── js/app.js
+ 
 ```
 
 ---
