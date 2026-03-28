@@ -15,6 +15,8 @@ env/
 # Data files (too large for GitHub)
 backend/data/
 *.csv
+*.zip
+*.gz
 
 # IDE
 .vscode/
