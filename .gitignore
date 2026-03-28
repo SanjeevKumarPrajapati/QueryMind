@@ -13,7 +13,7 @@ env/
 *.egg-info/
 
 # Data files (too large for GitHub)
-data/
+backend/data/
 *.csv
 
 # IDE
